@@ -49,7 +49,7 @@ client.connect().then(()=> {console.log("Connection to Postgres succesfull!")})
 
 
       //Create User
-      router.post('/users/new', (req, res, next)=> {
+      router.post('/users/new/user', (req, res, next)=> {
 
       const text = 'INSERT INTO users(user_id, username, password, email, tokens) VALUES ($1, $2, $3, $4, $5)'
       let data = [req.body.user_id, req.body.username, req.body.password, req.body.email, req.body.tokens]
@@ -65,6 +65,48 @@ client.connect().then(()=> {console.log("Connection to Postgres succesfull!")})
               console.log("New user: >" + req.body.username + "< succesfully inserted!")
           })
       });
+
+
+
+      //Create User Shipping
+      router.post('/users/new/shipping', (req, res, next)=> {
+
+      const text = 'INSERT INTO users_shipping(user_id, first_name, last_name, address_one, address_two, city, state, zip, country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)'
+      let data = [req.body.user_id, req.body.first_name, req.body.last_name, req.body.address_one, req.body.address_two, req.body.city, req.body.state, req.body.zip, req.body.country]
+        
+      // If insertion is succesfull log message:
+        client.query(text, data)
+            .then( ()=> {
+              res.status(200)
+              .json({
+                status: 'Success',
+                message: 'Inserted new Shipping Adress'
+              });
+              console.log("New shipping address: >" + req.body.address_one + "< succesfully inserted!")
+          })
+      });
+
+
+
+      //Create User Payment
+      router.post('/users/new/payment', (req, res, next)=> {
+
+      const text = 'INSERT INTO users(user_id, card_name, card_number, exp_date, cvv) VALUES ($1, $2, $3, $4, $5)'
+      let data = [req.body.user_id, req.body.card_name, req.body.card_number, req.body.exp_date, req.body.cvv]
+        
+      // If insertion is succesfull log message:
+        client.query(text, data)
+            .then( ()=> {
+              res.status(200)
+              .json({
+                status: 'Success',
+                message: 'Inserted new Payment Method'
+              });
+              console.log("New payment method: >" + req.body.card_name + "< succesfully inserted!")
+          })
+      });
+
+
 
 
       //Upate User
